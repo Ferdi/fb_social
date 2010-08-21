@@ -1,0 +1,6 @@
+; $Id: fb_social_share.info,v 1.1.2.2 2010/07/11 01:46:54 ferdi Exp $
+name = fb social share
+description = fb social share
+dependencies[] = fb_social
+package = "Facebook Social"
+core = 6.x

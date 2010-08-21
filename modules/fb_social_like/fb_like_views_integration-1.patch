@@ -1,0 +1,99 @@
+? fb_like_views_integration-1.patch
+Index: fb_social_like.admin.inc
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/fb_social/modules/fb_social_like/fb_social_like.admin.inc,v
+retrieving revision 1.3.2.2
+diff -u -p -r1.3.2.2 fb_social_like.admin.inc
+--- fb_social_like.admin.inc	7 May 2010 02:49:42 -0000	1.3.2.2
++++ fb_social_like.admin.inc	20 Aug 2010 22:45:07 -0000
+@@ -49,7 +49,18 @@ function fb_social_like_settings_form(){
+     '#collapsed' => FALSE,
+   );
+   
+-  $form['widget_setings']['fb_social_like_layout_style'] = array(
++  $widget_elements = fb_social_like_widget_settings_form();
++  foreach($widget_elements as $key => $value){
++    $form['widget_settings'][$key] = $value;
++  }
++  
++  $form = system_settings_form($form);
++  return $form;
++}
++
++function fb_social_like_widget_settings_form(){
++  $form = array();
++  $form['fb_social_like_layout_style'] = array(
+     '#type' => 'select',
+     '#title' => t('Layout style'),
+     '#description' => t('Determines the size and the amount of the social context next to the button'),
+@@ -57,21 +68,21 @@ function fb_social_like_settings_form(){
+     '#options' => array('standard' => t('standard'), 'button_count' => t('button_count') )
+   );
+   
+-  $form['widget_setings']['fb_social_like_show_faces'] = array(
++  $form['fb_social_like_show_faces'] = array(
+     '#type' => 'checkbox',
+     '#title' => t('Show faces'),
+     '#description' => t('Show profiles pictures below the button'),
+     '#default_value' => variable_get('fb_social_like_show_faces', 0),
+   );
+   
+-  $form['widget_setings']['fb_social_like_width'] = array(
++  $form['fb_social_like_width'] = array(
+     '#type' => 'textfield',
+     '#title' => t('Width'),
+     '#description' => t('The width of the plugin in pixel'),
+     '#default_value' => variable_get('fb_social_like_width', 350),
+   );
+   
+-  $form['widget_setings']['fb_social_like_verb'] = array(
++  $form['fb_social_like_verb'] = array(
+     '#type' => 'select',
+     '#title' => t('Verb'),
+     '#description' => t('The verb to display in the button'),
+@@ -79,7 +90,7 @@ function fb_social_like_settings_form(){
+     '#options' => array('like' => t('like'), 'recommend' => t('recommend') )
+   );
+   
+-  $form['widget_setings']['fb_social_like_font'] = array(
++  $form['fb_social_like_font'] = array(
+     '#type' => 'select',
+     '#title' => t('Font'),
+     '#description' => t('The font of the plugin'),
+@@ -87,7 +98,7 @@ function fb_social_like_settings_form(){
+     '#options' => array('arial' => t('arial'), 'verdana' => t('verdana') )
+   );
+   
+-  $form['widget_setings']['fb_social_like_color'] = array(
++  $form['fb_social_like_color'] = array(
+     '#type' => 'select',
+     '#title' => t('Color'),
+     '#description' => t('The color scheme of the plugin'),
+@@ -95,6 +106,5 @@ function fb_social_like_settings_form(){
+     '#options' => array('dark' => t('dark'), 'light' => t('light'), 'evil' => t('evil') )
+   );
+   
+-  $form = system_settings_form($form);
+   return $form;
+ }
+\ No newline at end of file
+Index: fb_social_like.module
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/fb_social/modules/fb_social_like/fb_social_like.module,v
+retrieving revision 1.4.2.10
+diff -u -p -r1.4.2.10 fb_social_like.module
+--- fb_social_like.module	20 Jul 2010 02:10:16 -0000	1.4.2.10
++++ fb_social_like.module	20 Aug 2010 22:45:07 -0000
+@@ -192,3 +192,12 @@ function fb_social_like_type($type){
+   return (isset($fb_like_types[$type]) && $fb_like_types[$type]) ? TRUE : FALSE;
+ }
+ 
++/**
++ * Implementation of hook_views_api().
++ */
++function fb_social_like_views_api() {
++  return array(
++    'api' => '2.0',
++  );
++}
++

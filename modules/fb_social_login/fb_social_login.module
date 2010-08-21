@@ -1,0 +1,51 @@
+<?php
+//$Id$
+
+/**
+ * implementation of hook fb_social_event_subscribe
+ */
+function fb_social_login_fb_social_event_subscribe(){
+  $output =
+  "FB.Event.subscribe('auth.sessionChange', function(response) {
+    if (response.session) {
+      console.log('logged in');
+      // A user has logged in, and a new cookie has been saved
+    } else {
+      console.log('logged out');
+      // The user has logged out, and the cookie has been cleared
+    }
+  })";
+  
+  return $output;
+}
+
+/**
+ * Implementation of hook_block
+ */
+function fb_social_login_block($op = 'list', $delta = 0, $edit = array()){
+  switch ($op) {
+    case 'list' :
+      
+      $blocks['fb_social_login'] = array(
+          'info' => t('fb social login'), 
+          'admin' => TRUE 
+      );
+      
+      return $blocks;
+    case 'view' :
+      switch ($delta) {
+        case 'fb_social_login' :
+          // show the block comment only for nodes
+          //$node = menu_get_object();
+          
+          //if (is_object($node) && $node->nid) {
+            return array(
+                'subject' => t(''), 
+                'content' => '<fb:login-button></fb:login-button>', 
+            );
+          
+          //}
+      }
+      break;
+  }
+}
