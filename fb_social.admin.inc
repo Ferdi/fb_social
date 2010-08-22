@@ -23,11 +23,11 @@ function fb_social_settings_form(){
   );
   
   $form['fb_social_locale'] = array(
-      '#title' => t('Default facebook application locale'), 
-      '#type' => 'select', 
-      '#default_value' => variable_get('fb_social_locale', 'en_US'), 
-      '#description' => t('Your facebook application locale'), 
-      '#options' => _get_facebook_locale() 
+    '#title' => t('Default facebook application locale'), 
+    '#type' => 'select', 
+    '#default_value' => variable_get('fb_social_locale', 'en_US'), 
+    '#description' => t('Your facebook application locale'), 
+    '#options' => _get_facebook_locale() 
   );
   
   $form['fb_social_urls'] = array(
